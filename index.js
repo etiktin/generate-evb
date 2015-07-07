@@ -69,7 +69,7 @@ function readDirTree(path) {
 function loadTemplate(templatePath) {
     var contents;
     try {
-        contents = fs.readFileSync(templatePath, {encoding: 'ucs2'});
+        contents = fs.readFileSync(templatePath, 'ucs2');
         // We remove indents to trim down template size (you can always beautify/prettify the end result if you wish)
         contents = contents.replace(RE.PRE_TAG_INDENTS, '<');
     } catch (e) {
@@ -151,5 +151,5 @@ module.exports = function generate(projectName, inputExe, outputExe, path2pack, 
     // Note: When you create a project manually using Enigma's GUI it prepends BOM (byte order mark) to the file.
     // fs.writeFile doesn't do that, but it doesn't seem to cause any issue with Enigma. If an issue related to the
     // missing BOM arises, we can add it by prepending '\ufeff' to projectTemplate
-    fs.writeFileSync(resolvePath(projectName), projectTemplate, {encoding: 'ucs2'});
+    fs.writeFileSync(resolvePath(projectName), projectTemplate, 'ucs2');
 };
