@@ -118,7 +118,7 @@ function generateDirTreeXml(path2pack, dirTemplate, fileTemplate) {
 }
 
 
-function generate(projectName, inputExe, outputExe, path2pack, templatePath) {
+module.exports = function generate(projectName, inputExe, outputExe, path2pack, templatePath) {
     // Resolve the paths for the different templates
     templatePath = templatePath || {};
     templatePath.project = resolvePath(templatePath.project || DEFAULT_TEMPLATE_PATH.PROJECT);
@@ -141,16 +141,4 @@ function generate(projectName, inputExe, outputExe, path2pack, templatePath) {
     // fs.writeFile doesn't do that, but it doesn't seem to cause any issue with Enigma. If an issue related to the
     // missing BOM arises, we can add it by prepending '\ufeff' to projectTemplate
     fs.writeFileSync(resolvePath(projectName), projectTemplate, {encoding: 'ucs2'});
-}
-
-//var path2pack = 'C:\\Dev\\MCE\\FrameWork\\Nearo\\NearoWebServer\\BuildBoxedApp\\GenerateEvb\\testPath';
-var path2pack = 'C:\\Dev\\MCE\\FrameWork\\Nearo\\NearoWebServer\\Server\\build\\nearo\\WebServer';
-generate(joinPath(__dirname, 'test.evb'), 'input.exe', 'node.exe', path2pack);
-
-var child_process = require('child_process');
-child_process.execFile('C:\\Program Files (x86)\\Enigma Virtual Box\\enigmavbconsole.exe', [joinPath(__dirname, 'test.evb')], function (err, stdin, stdout) {
-    if (err) {
-        throw err;
-    }
-    console.log('Yofi');
-});
+};
