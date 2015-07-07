@@ -1,0 +1,15 @@
+{
+  "name": "generate-evb-project",
+  "version": "0.4.2",
+  "description": "Generate an 'Enigma Virtual Box' project file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eran Tiktin",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "graceful-fs": "^4.1.2"
+  }
+}
