@@ -117,7 +117,18 @@ function generateDirTreeXml(path2pack, dirTemplate, fileTemplate) {
     return generateDirTreeXmlPart(path2pack, dirTree);
 }
 
-
+// This is the entry point to the module.
+// In this function we synchronously generate an 'Enigma Virtual Box' project file. The file will include entries for
+// all the files and dirs located at 'path2pack', so when you process the project using Enigma's GUI/CLI you will get an
+// executable with all the files packed into it.
+// - projectName (String) - the file path to which we want to save the generated evb file (e.g. './build/myapp.evb')
+// - inputExe (String) - the input executable file path. Enigma packs the files from 'path2pack' into a copy of this exe
+// - outputExe (String) - the output executable file path. Enigma saves the packed file to this path
+// - path2pack (String) - the path to the directory with the content that we want to pack into the inputExe copy
+// - templatePath (Object - optional, will default to the files in the templates directory):
+//      - project (String) - the path to a project template
+//      - dir (String) - the path to a directory template
+//      - file (String) - the path to a file template
 module.exports = function generate(projectName, inputExe, outputExe, path2pack, templatePath) {
     // Resolve the paths for the different templates
     templatePath = templatePath || {};
