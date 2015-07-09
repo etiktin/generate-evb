@@ -26,9 +26,9 @@ function _resolveTemplatePath(templateName) {
 }
 
 // Helper to generate a regular expression which will match strings that look like:
-// '<!-- inject: ' + key + ' -->'
-function _getInjectRegExp(key) {
-    return new RegExp('<!--\\s*?inject\\s*?:\\s*?' + key + '\\s*?-->', 'i');
+// '<!-- inject: ' + what + ' -->'
+function _getInjectRegExp(what) {
+    return new RegExp('<!--\\s*?inject\\s*?:\\s*?' + what + '\\s*?-->', 'i');
 }
 
 // The Dir class represents a directory
@@ -125,7 +125,7 @@ function generateDirTreeXml(path2pack, dirTemplate, fileTemplate) {
 // - inputExe (String) - the input executable file path. Enigma packs the files from 'path2pack' into a copy of this exe
 // - outputExe (String) - the output executable file path. Enigma saves the packed file to this path
 // - path2pack (String) - the path to the directory with the content that we want to pack into the inputExe copy
-// - templatePath (Object - optional, will default to the files in the templates directory):
+// - templatePath (Object) - optional, will default to the files in the templates directory:
 //      - project (String) - the path to a project template
 //      - dir (String) - the path to a directory template
 //      - file (String) - the path to a file template
@@ -145,7 +145,7 @@ module.exports = function generate(projectName, inputExe, outputExe, path2pack, 
     projectTemplate = projectTemplate
         .replace(RE.INJECT_INPUT_EXE, resolvePath(inputExe))
         .replace(RE.INJECT_OUTPUT_EXE, resolvePath(outputExe))
-        .replace(RE.INJECT_FILES, generateDirTreeXml(path2pack, dirTemplate, fileTemplate));
+        .replace(RE.INJECT_FILES, generateDirTreeXml(resolvePath(path2pack), dirTemplate, fileTemplate));
 
     // Save the project to file
     // Note: When you create a project manually using Enigma's GUI it prepends BOM (byte order mark) to the file.
