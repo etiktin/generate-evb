@@ -14,7 +14,11 @@
     "enigmavb",
     "enigmavb.exe",
     "enigmavbconsole",
-    "enigmavbconsole.exe"
+    "enigmavbconsole.exe",
+    "Electron",
+    "atom-shell",
+    "NW.js",
+    "node-webkit"
   ],
   "repository": {
     "type": "git",

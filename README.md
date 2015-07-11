@@ -82,9 +82,26 @@ child_process.execFile('C:/Program Files (x86)/Enigma Virtual Box/enigmavbconsol
 
 ## Customization
 
-If you ever need to customize some of the evb project options (e.g. compression, registry etc.), you can.
+It's possible to customize the project options (e.g. disable compression, add registry entries etc.).
 The options are defined in 3 template files that are located at `node_modules/node-generate-evb/templates`.
-Before you change them, you should copy them outside of `node_modules` and keep them with your project.
-The templates are xml files that are pretty descriptive so for most options it should be easy to figure our what needs changing. If you are having difficulties finding the option, I suggest that you will generate the project file using the default options and then use `enigmavb.exe` (Enigma's GUI) to change the options as you see fit. Do a diff between the before and after and you will see what option needs changing. So you can go back to the templates and change them accordingly.
+Before you change them, copy the templates to a location outside of `node_modules`.
+
+The templates are xml files that are pretty descriptive, so for most options it should be easy to figure our what needs changing. If you can't find the option, I suggest that you will generate the project file using the default options and use `enigmavb.exe` (Enigma's GUI) to change the options as you see fit. Then you should do a `diff` between the before and after, so you will see what options need changing. Then you can go back to the templates copy and change them accordingly.
+
 To make `generateEvb` use the updated templates just pass it the optional *templatePath* object. We will use the default templates for any missing template, so you don't have to replace all of them.
 For example if you want to cancel the default file compression, you can copy the `project-template.xml` and set the `CompressFiles` value to `false`. Then in your call to `generateEvb` you can pass `{project: 'project-no-compression-template.xml'}` as the *templatePath* parameter.
+
+## Alternatives
+
+[enigmavirtualbox](https://www.npmjs.com/package/enigmavirtualbox) is a Node.js module and CLI, that offers the following capabilities:
+- Download and install EVB
+- Generate a project file (currently this is pretty limited and not customizable)
+- Pack the project file
+
+You can use this module along with `generate-evb`.
+
+## Problems?
+
+Please file an [issue](https://github.com/etiktin/node-generate-evb/issues).
+
+Suggestions are also welcome :)
