@@ -1,6 +1,11 @@
 
 # generate-evb
 
+[![npm version](https://img.shields.io/npm/v/generate-evb.svg)](https://www.npmjs.com/package/generate-evb)
+[![david dependencies](https://img.shields.io/david/etiktin/node-generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/package.json)
+[![node engine](https://img.shields.io/node/v/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/package.json)
+[![npm license](https://img.shields.io/npm/l/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/LICENSE)
+
 ## Goal
 To help you automate the process of generating an 'Enigma Virtual Box' project file (*.evb) as part of your normal build stage.
 
