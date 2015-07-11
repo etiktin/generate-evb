@@ -1,3 +1,4 @@
+
 # generate-evb
 
 ## Goal
@@ -35,7 +36,7 @@ Where:
     - *dir* (String) - the path to a directory template
     - *file* (String) - the path to a file template
 
-## Usage example:
+## Usage example
 
 Let's say that we want to pack a Node.js project into `node.exe`. Our copy of `node.exe` is located at `C:/Program Files (x86)/nodejs/node.exe`, so that will be our *inputExe*. The Node.js project is located at `../foo` (all paths can be relative or absolute), so that's our *path2pack*. We want to save the packaged executable to `build/node.exe` so that will be our *outputExe*. And we will save the evb project to `build/packedNode.evb`, so that's the *projectName*.
 
@@ -74,4 +75,11 @@ child_process.execFile('C:/Program Files (x86)/Enigma Virtual Box/enigmavbconsol
 });
 ```
 
+## Customization
 
+If you ever need to customize some of the evb project options (e.g. compression, registry etc.), you can.
+The options are defined in 3 template files that are located at `node_modules/node-generate-evb/templates`.
+Before you change them, you should copy them outside of `node_modules` and keep them with your project.
+The templates are xml files that are pretty descriptive so for most options it should be easy to figure our what needs changing. If you are having difficulties finding the option, I suggest that you will generate the project file using the default options and then use `enigmavb.exe` (Enigma's GUI) to change the options as you see fit. Do a diff between the before and after and you will see what option needs changing. So you can go back to the templates and change them accordingly.
+To make `generateEvb` use the updated templates just pass it the optional *templatePath* object. We will use the default templates for any missing template, so you don't have to replace all of them.
+For example if you want to cancel the default file compression, you can copy the `project-template.xml` and set the `CompressFiles` value to `false`. Then in your call to `generateEvb` you can pass `{project: 'project-no-compression-template.xml'}` as the *templatePath* parameter.
