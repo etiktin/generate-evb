@@ -19,8 +19,8 @@ executable can read/execute files that were packed with it as if they were reall
 
 To create a packaged executable you need to create a project file that describes what needs to be packaged along with
 some other virtualization attributes. The tool offers only a GUI for creating the project and there's no builtin support
-for recursively packing an entire folder. In other words, if files were changed in one of the packed folders, you had to
-update the project manually using the GUI.
+for recursively packing an entire directory. In other words, if files were changed in one of the packed folders, you had
+to update the project manually using the GUI.
 
 We offer an alternative. You can use `generate-evb` in your node build script, to pack an entire directory structure. To
 update the project file, you just re-run your build script. You can also wrap your code in a `gulp`/`grunt` task if you
@@ -39,13 +39,13 @@ var generateEvb = require('generate-evb');
 
 The signature of `generateEvb` is:
 ```javascript
-generateEvb(projectName, inputExe, outputExe, path2pack, templatePath);
+generateEvb(projectName, inputExe, outputExe, path2Pack, templatePath);
 ```
 Where:
 - *projectName* (String) - the file path to which we want to save the generated evb file (e.g. `build/myProject.evb`)
-- *inputExe* (String) - the input executable file path. Enigma packs the files from *path2pack* into a copy of this exe
+- *inputExe* (String) - the input executable file path. Enigma packs the files from *path2Pack* into a copy of this exe
 - *outputExe* (String) - the output executable file path. Enigma saves the packed file to this path
-- *path2pack* (String) - the path to the directory with the content that we want to pack into the copy of *inputExe*
+- *path2Pack* (String) - the path to the directory with the content that we want to pack into the copy of *inputExe*
 - *templatePath* (Object) - optional, will default to the files in the templates directory:
     - *project* (String) - the path to a project template
     - *dir* (String) - the path to a directory template
@@ -55,7 +55,7 @@ Where:
 
 Let's say that we want to pack a Node.js project into `node.exe`. Our copy of `node.exe` is located at
 `C:/Program Files (x86)/nodejs/node.exe`, so that will be our *inputExe*. The Node.js project is located at `../foo`
-(all paths can be relative or absolute), so that's our *path2pack*. We want to save the packaged executable to
+(all paths can be relative or absolute), so that's our *path2Pack*. We want to save the packaged executable to
 `build/node.exe` so that will be our *outputExe*. And we will save the evb project to `build/packedNode.evb`, so that's
 the *projectName*.
 
