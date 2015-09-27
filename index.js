@@ -146,16 +146,19 @@ function generateDirTreeXml(path2Pack, dirTemplate, fileTemplate, filter) {
 
 // This is the entry point to the module.
 // In this function we synchronously generate an 'Enigma Virtual Box' project file. The file will include entries for
-// all the files and dirs located at 'path2Pack', so when you process the project using Enigma's GUI/CLI you will get an
+// all the files and dirs located at `path2Pack`, so when you process the project using Enigma's GUI/CLI you will get an
 // executable with all the files packed into it.
 // - projectName (String) - the file path to which we want to save the generated evb file (e.g. 'build/myProject.evb')
-// - inputExe (String) - the input executable file path. Enigma packs the files from 'path2Pack' into a copy of this exe
+// - inputExe (String) - the input executable file path. Enigma packs the files from `path2Pack` into a copy of this exe
 // - outputExe (String) - the output executable file path. Enigma saves the packed file to this path
 // - path2Pack (String) - the path to the directory with the content that we want to pack into the copy of inputExe
-// - templatePath (Object) - optional, will default to the files in the templates directory:
-//      - project (String) - the path to a project template
-//      - dir (String) - the path to a directory template
-//      - file (String) - the path to a file template
+// - options (Object) - optional
+//     - filter (Function) - optional, if provided it will be called with each file and directory from `path2Pack`. The
+//         function should return true for any file or directory the user want to pack, and false for anything else
+//     - templatePath (Object) - optional, will default to the files in the templates directory:
+//         - project (String) - optional, path to a project template
+//         - dir (String) - optional, path to a directory template
+//         - file (String) - optional, path to a file template
 module.exports = function generate(projectName, inputExe, outputExe, path2Pack, options) {
     options = options || {};
     options.templatePath = options.templatePath || {};

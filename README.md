@@ -11,11 +11,11 @@ To help you automate the process of generating an 'Enigma Virtual Box' project f
 stage.
 
 ## Overview
-[Enigma Virtual Box](http://enigmaprotector.com/en/aboutvb.html) is a great tool that allows you to package a Windows
-executable with all of the data and dependencies it needs in-order to run (dlls, assets, registry entries etc.). The
-tool takes care of the virtualization, so you don't need to change your code in order for this to work. The packaged
-executable can read/execute files that were packed with it as if they were really in the file system and not virtualized
-(e.g. if you packed `./images/logo.png` into it, you can read the file from that path).
+[Enigma Virtual Box](http://enigmaprotector.com/en/aboutvb.html) (EVB) is a great tool that allows you to package a
+Windows executable with all of the data and dependencies it needs in-order to run (dll files, assets, registry entries
+etc.). The tool takes care of the virtualization, so you don't need to change your code in order for this to work. The
+packaged executable can read/execute files that were packed with it as if they were really in the file system and not
+virtualized (e.g. if you packed `./images/logo.png` into it, you can read the file from that path).
 
 To create a packaged executable you need to create a project file that describes what needs to be packaged along with
 some other virtualization attributes. The tool offers only a GUI for creating the project and there's no builtin support
@@ -43,13 +43,18 @@ generateEvb(projectName, inputExe, outputExe, path2Pack, templatePath);
 ```
 Where:
 - *projectName* (String) - the file path to which we want to save the generated evb file (e.g. `build/myProject.evb`)
-- *inputExe* (String) - the input executable file path. Enigma packs the files from *path2Pack* into a copy of this exe
+- *inputExe* (String) - the input executable file path. Enigma packs the files from *path2Pack* into a copy of this
+executable
 - *outputExe* (String) - the output executable file path. Enigma saves the packed file to this path
 - *path2Pack* (String) - the path to the directory with the content that we want to pack into the copy of *inputExe*
-- *templatePath* (Object) - optional, will default to the files in the templates directory:
-    - *project* (String) - the path to a project template
-    - *dir* (String) - the path to a directory template
-    - *file* (String) - the path to a file template
+- *options* (Object) - optional
+    - *filter* (Function) - optional, this function is called with the following parameters: fullPath (String), name
+    (String), isDir (Boolean) for each directory and file in *path2Pack*. The function should return `true` for any file
+    or directory you want to pack, and `false` for anything else
+    - *templatePath* (Object) - optional, will default to the templates in the `generate-evb/templates`
+        - *project* (String) - optional, path to a project template
+        - *dir* (String) - optional, path to a directory template
+        - *file* (String) - optional, path to a file template
 
 ## Usage example
 
@@ -101,10 +106,26 @@ child_process.execFile(evbCliPath, [projectName], function (err, stdout, stderr)
 });
 ```
 
+If *path2Pack* contains some files or directories you don't want to pack, you should provide a filter function. This is
+especially true, if *path2Pack* contains *inputExe* (this is common when packing an [Electron](http://electron.atom.io/)
+app). Here's an example of how to filter out all png files:
+
+```javascript
+var generateEvb = require('generate-evb');
+
+generateEvb('build/packedNode.evb', 'C:/Program Files (x86)/nodejs/node.exe', 'build/node.exe', '../foo', {
+    filter: function (fullPath, name, isDir) {
+        var pngRegexp = /.*\.png$/i;
+        // Any directory or any file that isn't a png file, is approved
+        return isDir || !pngRegexp.test(name);
+    }
+});
+```
+
 ## Customization
 
 It's possible to customize the project options (e.g. disable compression, add registry entries etc.).
-The options are defined in 3 template files that are located at `node_modules/node-generate-evb/templates`.
+The options are defined in 3 template files that are located at `generate-evb/templates`.
 Before you change them, copy the templates to a location outside of `node_modules`.
 
 The templates are xml files that are pretty descriptive, so for most options it should be easy to figure our what needs
@@ -113,11 +134,11 @@ use `enigmavb.exe` (Enigma's GUI) to change the options as you see fit. Then you
 and after, so you will see what options need changing. Then you can go back to the templates copy and change them
 accordingly.
 
-To make `generateEvb` use the updated templates just pass it the optional *templatePath* object. We will use the default
-templates for any missing template, so you don't have to replace all of them.
+To make `generateEvb` use the updated templates just pass it the optional *options.templatePath* object. We will use the
+default templates for any missing template, so you don't have to replace all of them.
 For example if you want to cancel the default file compression, you can copy the `project-template.xml` and set the
 `CompressFiles` value to `false`. Then in your call to `generateEvb` you can pass
-`{project: 'project-no-compression-template.xml'}` as the *templatePath* parameter.
+`{project: 'project-no-compression-template.xml'}` as the *options.templatePath* parameter.
 
 ## Alternatives
 
@@ -127,7 +148,8 @@ following capabilities:
 - Generate a project file (currently this is pretty limited and not customizable)
 - Pack the project file
 
-You can use this module along with `generate-evb`.
+You can use this module along with `generate-evb`, where `enigmavirtualbox` takes care of installing, packing and
+`generate-evb` takes care of generating the project file.
 
 ## Problems?
 
