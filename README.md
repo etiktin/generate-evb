@@ -39,7 +39,7 @@ var generateEvb = require('generate-evb');
 
 The signature of `generateEvb` is:
 ```javascript
-generateEvb(projectName, inputExe, outputExe, path2Pack, templatePath);
+generateEvb(projectName, inputExe, outputExe, path2Pack, options);
 ```
 Where:
 - *projectName* (String) - the file path to which we want to save the generated evb file (e.g. `build/myProject.evb`)
