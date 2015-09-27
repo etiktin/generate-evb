@@ -1,6 +1,6 @@
 {
   "name": "generate-evb",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Generate an 'Enigma Virtual Box' project file (*.evb)",
   "main": "index.js",
   "scripts": {
