@@ -18,7 +18,12 @@
     "Electron",
     "atom-shell",
     "NW.js",
-    "node-webkit"
+    "node-webkit",
+    "Windows",
+    "Pack",
+    "Publish",
+    "Virtualization",
+    "Build"
   ],
   "repository": {
     "type": "git",
