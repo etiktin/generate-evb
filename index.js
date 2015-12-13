@@ -3,44 +3,40 @@
 var fs = require('graceful-fs');
 var resolvePath = require('path').resolve;
 var joinPath = require('path').join;
+var mergeOptions = require('merge-options');
 
 var DEFAULT_TEMPLATE_PATH = {
-    PROJECT: _resolveDefaultTemplatePath('project-template.xml'),
-    DIR: _resolveDefaultTemplatePath('dir-template.xml'),
-    FILE: _resolveDefaultTemplatePath('file-template.xml')
+    PROJECT: resolveDefaultTemplatePath('project-template.xml'),
+    DIR: resolveDefaultTemplatePath('dir-template.xml'),
+    FILE: resolveDefaultTemplatePath('file-template.xml')
 };
 
 var RE = {
     PRE_TAG_INDENTS: /^\s+?</mg,
-    INJECT_DIR_NAME: _getInjectRegExp('dirName'),
-    INJECT_FILES: _getInjectRegExp('files'),
-    INJECT_FILE_NAME: _getInjectRegExp('fileName'),
-    INJECT_FILE_PATH: _getInjectRegExp('filePath'),
-    INJECT_INPUT_EXE: _getInjectRegExp('inputExe'),
-    INJECT_OUTPUT_EXE: _getInjectRegExp('outputExe')
+
+    DIR_NAME: getInjectRegExp('dirName'),
+    FILES: getInjectRegExp('files'),
+    FILE_NAME: getInjectRegExp('fileName'),
+    FILE_PATH: getInjectRegExp('filePath'),
+    INPUT_EXE: getInjectRegExp('inputExe'),
+    OUTPUT_EXE: getInjectRegExp('outputExe'),
+
+    OPT_DELETE_EXTRACTED: getInjectRegExp('deleteExtractedOnExit'),
+    OPT_COMPRESS_FILES: getInjectRegExp('compressFiles'),
+    OPT_SHARE_VIRTUAL_SYSTEM: getInjectRegExp('shareVirtualSystem'),
+    OPT_MAP_WITH_TEMP: getInjectRegExp('mapExecutableWithTemporaryFile'),
+    OPT_ALLOW_RUNNING_VIRTUAL_EXE: getInjectRegExp('allowRunningOfVirtualExeFiles')
 };
 
 // Helper to get absolute path to template
-function _resolveDefaultTemplatePath(templateName) {
+function resolveDefaultTemplatePath(templateName) {
     return joinPath(__dirname, 'templates', templateName);
 }
 
 // Helper to generate a regular expression which will match strings that look like:
 // '<!-- inject: ' + what + ' -->'
-function _getInjectRegExp(what) {
+function getInjectRegExp(what) {
     return new RegExp('<!--\\s*?inject\\s*?:\\s*?' + what + '\\s*?-->', 'i');
-}
-
-// Retrieve the template path. We assume `options` and `options.templatePath` are valid objects (not undefined).
-// We look for the path in up to 3 locations in the following order:
-// 1. `options.templatePath` - This is where the caller should store template paths (added in version > 0.4.4)
-// 2. `options` - In version 0.4.4 and lower we used a `templatePath` object instead of an `options` object, so for
-// comparability we test it as well
-// 3. `DEFAULT_TEMPLATE_PATH` - This location holds the default template paths
-function getTemplatePath(options, templateType) {
-    return resolvePath(options.templatePath[templateType] ||
-        options[templateType] ||
-        DEFAULT_TEMPLATE_PATH[templateType.toUpperCase()]);
 }
 
 // Take a template path, read/load it's content and return it. If we fail to load the file, we will throw an appropriate
@@ -49,7 +45,7 @@ function getTemplatePath(options, templateType) {
 function loadTemplate(templatePath) {
     var contents;
     try {
-        contents = fs.readFileSync(templatePath, 'ucs2');
+        contents = fs.readFileSync(resolvePath(templatePath), 'ucs2');
         // We remove indents to trim down template size (you can always beautify/prettify the end result if you wish)
         contents = contents.replace(RE.PRE_TAG_INDENTS, '<');
     } catch (e) {
@@ -118,13 +114,13 @@ function generateDirTreeXml(path2Pack, dirTemplate, fileTemplate, filter) {
 
             if (isDir) {
                 // The element describes a directory
-                part = dirTemplate.replace(RE.INJECT_DIR_NAME, name);
+                part = dirTemplate.replace(RE.DIR_NAME, name);
                 filesXml = generateDirTreeXmlPart(fullPath, element.tree);
-                part = part.replace(RE.INJECT_FILES, filesXml);
+                part = part.replace(RE.FILES, filesXml);
             } else {
                 // The element describes a file
-                part = fileTemplate.replace(RE.INJECT_FILE_NAME, element);
-                part = part.replace(RE.INJECT_FILE_PATH, fullPath);
+                part = fileTemplate.replace(RE.FILE_NAME, element);
+                part = part.replace(RE.FILE_PATH, fullPath);
             }
             // Add the xml for the element
             parts.push(part);
@@ -159,17 +155,31 @@ function generateDirTreeXml(path2Pack, dirTemplate, fileTemplate, filter) {
 //         - project (String) - optional, path to a project template
 //         - dir (String) - optional, path to a directory template
 //         - file (String) - optional, path to a file template
+//     - evbOptions (Object) - optional:
+//         - deleteExtractedOnExit (Boolean) - defaults to true
+//         - compressFiles (Boolean) - defaults to true
+//         - shareVirtualSystem (Boolean) - defaults to false
+//         - mapExecutableWithTemporaryFile (Boolean) - defaults to true
+//         - allowRunningOfVirtualExeFiles (Boolean) - defaults to true
 module.exports = function generate(projectName, inputExe, outputExe, path2Pack, options) {
-    options = options || {};
-    options.templatePath = options.templatePath || {};
-    options.filter = options.filter || defaultFilter;
-
-    // Resolve the paths for the different templates
-    var templatePath = {
-        project: getTemplatePath(options, 'project'),
-        dir: getTemplatePath(options, 'dir'),
-        file: getTemplatePath(options, 'file')
-    };
+    // Merge options with defaults
+    options = mergeOptions({
+        filter: defaultFilter,
+        templatePath: {
+            project: DEFAULT_TEMPLATE_PATH.PROJECT,
+            dir: DEFAULT_TEMPLATE_PATH.DIR,
+            file: DEFAULT_TEMPLATE_PATH.FILE
+        },
+        evbOptions: {
+            deleteExtractedOnExit: true,
+            compressFiles: true,
+            shareVirtualSystem: false,
+            mapExecutableWithTemporaryFile: true,
+            allowRunningOfVirtualExeFiles: true
+        }
+    }, options);
+    var templatePath = options.templatePath;
+    var evbOptions = options.evbOptions;
 
     // Load templates
     var projectTemplate = loadTemplate(templatePath.project);
@@ -178,9 +188,17 @@ module.exports = function generate(projectName, inputExe, outputExe, path2Pack, 
 
     // Fill the project template
     projectTemplate = projectTemplate.
-        replace(RE.INJECT_INPUT_EXE, resolvePath(inputExe)).
-        replace(RE.INJECT_OUTPUT_EXE, resolvePath(outputExe)).
-        replace(RE.INJECT_FILES, generateDirTreeXml(resolvePath(path2Pack), dirTemplate, fileTemplate, options.filter));
+        // Set input and output executables
+        replace(RE.INPUT_EXE, resolvePath(inputExe)).
+        replace(RE.OUTPUT_EXE, resolvePath(outputExe)).
+        // Set options
+        replace(RE.OPT_DELETE_EXTRACTED, Boolean(evbOptions.deleteExtractedOnExit).toString()).
+        replace(RE.OPT_COMPRESS_FILES, Boolean(evbOptions.compressFiles).toString()).
+        replace(RE.OPT_SHARE_VIRTUAL_SYSTEM, Boolean(evbOptions.shareVirtualSystem).toString()).
+        replace(RE.OPT_MAP_WITH_TEMP, Boolean(evbOptions.mapExecutableWithTemporaryFile).toString()).
+        replace(RE.OPT_ALLOW_RUNNING_VIRTUAL_EXE, Boolean(evbOptions.allowRunningOfVirtualExeFiles).toString()).
+        // Add files
+        replace(RE.FILES, generateDirTreeXml(resolvePath(path2Pack), dirTemplate, fileTemplate, options.filter));
 
     // Save the project to file
     // Note: When you create a project manually using Enigma's GUI it prepends BOM (byte order mark) to the file.

@@ -38,7 +38,8 @@
   "author": "Eran Tiktin",
   "license": "MIT",
   "dependencies": {
-    "graceful-fs": "^4.1.2"
+    "graceful-fs": "^4.1.2",
+    "merge-options": "0.0.42"
   },
   "devDependencies": {
     "eslint": "^1.10.3"
