@@ -1,7 +1,8 @@
 
-# generate-evb
+ generate-evb
 
-[![npm version](https://img.shields.io/npm/v/generate-evb.svg)](https://www.npmjs.com/package/generate-evb)
+
+npm version](https://img.shields.io/npm/v/generate-evb.svg)](https://www.npmjs.com/package/generate-evb)
 [![david dependencies](https://img.shields.io/david/etiktin/node-generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/package.json)
 [![node engine](https://img.shields.io/node/v/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/package.json)
 [![npm license](https://img.shields.io/npm/l/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/LICENSE)
@@ -18,9 +19,9 @@ packaged executable can read/execute files that were packed with it as if they w
 virtualized (e.g. if you packed `./images/logo.png` into it, you can read the file from that path).
 
 To create a packaged executable you need to create a project file that describes what needs to be packaged along with
-some other virtualization attributes. The tool offers only a GUI for creating the project and there's no builtin support
-for recursively packing an entire directory. In other words, if files were changed in one of the packed folders, you had
-to update the project manually using the GUI.
+some other virtualization attributes. The tool offers only a GUI for creating the project and there's no built-in
+support for recursively packing an entire directory. In other words, if files were changed in one of the packed folders,
+you had to update the project manually using the GUI.
 
 We offer an alternative. You can use `generate-evb` in your node build script, to pack an entire directory structure. To
 update the project file, you just re-run your build script. You can also wrap your code in a `gulp`/`grunt` task if you
@@ -52,9 +53,19 @@ executable
     (String), isDir (Boolean) for each directory and file in *path2Pack*. The function should return `true` for any file
     or directory you want to pack, and `false` for anything else
     - *templatePath* (Object) - optional, will default to the templates in the `generate-evb/templates`
-        - *project* (String) - optional, path to a project template
-        - *dir* (String) - optional, path to a directory template
-        - *file* (String) - optional, path to a file template
+        - *project* (String) - path to a project template
+        - *dir* (String) - path to a directory template
+        - *file* (String) - path to a file template
+    - *evbOptions* (Object) - optional:
+        - *deleteExtractedOnExit* (Boolean) - same as Enigma's "File Options > Delete Extracted On Exit". defaults to
+        true
+        - *compressFiles* (Boolean) - same as Enigma's "File Options > Compress Files". defaults to true
+        - *shareVirtualSystem* (Boolean) - same as Enigma's "Options Tab > Share virtual system to child processes".
+        defaults to false
+        - *mapExecutableWithTemporaryFile* (Boolean) - same as Enigma's "Options Tab > Map executable files using
+        temporary file". defaults to true
+        - *allowRunningOfVirtualExeFiles* (Boolean) - same as Enigma's "Options Tab > Allow running of virtual
+        executable files". defaults to true
 
 ## Usage example
 
@@ -124,28 +135,26 @@ generateEvb('build/packedNode.evb', 'C:/Program Files (x86)/nodejs/node.exe', 'b
 
 ## Customization
 
-It's possible to customize the project options (e.g. disable compression, add registry entries etc.).
-The options are defined in 3 template files that are located at `generate-evb/templates`.
+You can customize the generated project using *options.evbOptions*. If an option/setting you are looking for is not
+available there (e.g. you want to add virtual registry entries), you can use custom templates.
+The default template files are located at `generate-evb/templates`.
 Before you change them, copy the templates to a location outside of `node_modules`.
 
 The templates are xml files that are pretty descriptive, so for most options it should be easy to figure our what needs
-changing. If you can't find the option, I suggest that you will generate the project file using the default options and
+changing. If you can't find the option, I suggest that you generate the project file using the default options and
 use `enigmavb.exe` (Enigma's GUI) to change the options as you see fit. Then you should do a `diff` between the before
-and after, so you will see what options need changing. Then you can go back to the templates copy and change them
+and after, so you will see what options need changing. Then you can go back to the templates copy, and modify
 accordingly.
 
 To make `generateEvb` use the updated templates just pass it the optional *options.templatePath* object. We will use the
 default templates for any missing template, so you don't have to replace all of them.
-For example if you want to cancel the default file compression, you can copy the `project-template.xml` and set the
-`CompressFiles` value to `false`. Then in your call to `generateEvb` you can pass
-`{project: 'project-no-compression-template.xml'}` as the *options.templatePath* parameter.
 
 ## Alternatives
 
 [enigmavirtualbox](https://www.npmjs.com/package/enigmavirtualbox) is a Node.js module and CLI, that offers the
 following capabilities:
 - Download and install EVB
-- Generate a project file (currently this is pretty limited and not customizable)
+- Generate a project file (currently this is very limited and not customizable)
 - Pack the project file
 
 You can use this module along with `generate-evb`, where `enigmavirtualbox` takes care of installing, packing and
