@@ -11,7 +11,7 @@
   "files": [
     "index.js",
     "templates"
-  ]
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/etiktin/node-generate-evb.git"
