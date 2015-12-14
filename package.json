@@ -2,9 +2,25 @@
   "name": "generate-evb",
   "version": "0.5.1",
   "description": "Generate an 'Enigma Virtual Box' project file (*.evb)",
+  "author": "Eran Tiktin",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "eslint **.js"
+  },
+  "files": [
+    "index.js",
+    "templates"
+  ]
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/etiktin/node-generate-evb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/etiktin/node-generate-evb/issues"
+  },
+  "engines": {
+    "node": ">=0.10.0"
   },
   "keywords": [
     "Enigma Virtual Box",
@@ -25,18 +41,6 @@
     "Virtualization",
     "Build"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/etiktin/node-generate-evb.git"
-  },
-  "bugs": {
-    "url": "https://github.com/etiktin/node-generate-evb/issues"
-  },
-  "engines": {
-    "node": ">=0.10.0"
-  },
-  "author": "Eran Tiktin",
-  "license": "MIT",
   "dependencies": {
     "graceful-fs": "^4.1.2",
     "merge-options": "0.0.42"
