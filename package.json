@@ -24,6 +24,7 @@
   },
   "keywords": [
     "Enigma Virtual Box",
+    "Enigma Virtualbox",
     "EVB",
     "Enigma",
     "Virtual Box",
@@ -39,13 +40,16 @@
     "Pack",
     "Publish",
     "Virtualization",
-    "Build"
+    "Build",
+    "Portable",
+    "Portable app",
+    "Portable applications"
   ],
   "dependencies": {
-    "graceful-fs": "^4.1.2",
-    "merge-options": "0.0.42"
+    "graceful-fs": "^4.1.11",
+    "merge-options": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^1.10.3"
+    "eslint": "^3.19.0"
   }
 }
