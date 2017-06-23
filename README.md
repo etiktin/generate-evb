@@ -1,25 +1,25 @@
 # generate-evb
 
 [![npm version](https://img.shields.io/npm/v/generate-evb.svg)](https://www.npmjs.com/package/generate-evb)
-[![david dependencies](https://img.shields.io/david/etiktin/node-generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/package.json)
-[![node engine](https://img.shields.io/node/v/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/package.json)
-[![npm license](https://img.shields.io/npm/l/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/node-generate-evb/master/LICENSE)
+[![david dependencies](https://img.shields.io/david/etiktin/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/generate-evb/master/package.json)
+[![node engine](https://img.shields.io/node/v/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/generate-evb/master/package.json)
+[![npm license](https://img.shields.io/npm/l/generate-evb.svg)](https://raw.githubusercontent.com/etiktin/generate-evb/master/LICENSE)
 
 ## Goal
 To help you automate the process of generating an 'Enigma Virtual Box' project file (*.evb) as part of your normal build
 stage.
 
 ## Overview
-[Enigma Virtual Box](http://enigmaprotector.com/en/aboutvb.html) (EVB) is a great tool that allows you to package a
-Windows executable with all of the data and dependencies it needs in-order to run (dll files, assets, registry entries
-etc.). The tool takes care of the virtualization, so you don't need to change your code in order for this to work. The
+[Enigma Virtual Box](http://enigmaprotector.com/en/aboutvb.html) (EVB) is a tool that lets you package a Windows 
+executable with all of the data and dependencies it needs in-order to run (dll files, assets, registry entries
+etc.). The tool takes care of all the virtualization, so you usually don't need to change your code in any way. The
 packaged executable can read/execute files that were packed with it as if they were really in the file system and not
-virtualized (e.g. if you packed `./images/logo.png` into it, you can read the file from that path).
+virtualized (e.g. if you packed `./images/logo.png`, you can read the file from that path).
 
 To create a packaged executable you need to create a project file that describes what needs to be packaged along with
 some other virtualization attributes. The tool offers only a GUI for creating the project and there's no built-in
 support for recursively packing an entire directory. In other words, if files were changed in one of the packed folders,
-you had to update the project manually using the GUI.
+you have to update the project manually using the GUI.
 
 We offer an alternative. You can use `generate-evb` in your node build script, to pack an entire directory structure. To
 update the project file, you just re-run your build script. You can also wrap your code in a `gulp`/`grunt` task if you
@@ -160,6 +160,6 @@ You can use this module along with `generate-evb`, where `enigmavirtualbox` take
 
 ## Problems?
 
-If you encounter a bug, please file an [issue](https://github.com/etiktin/node-generate-evb/issues).
+If you encounter a bug, please file an [issue](https://github.com/etiktin/generate-evb/issues).
 
 Suggestions and PRs are welcome :)
