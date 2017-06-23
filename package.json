@@ -1,6 +1,6 @@
 {
   "name": "generate-evb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate an \"Enigma Virtual Box\" project file (*.evb)",
   "author": "Eran Tiktin",
   "license": "MIT",
