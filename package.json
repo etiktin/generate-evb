@@ -1,6 +1,6 @@
 {
   "name": "generate-evb",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Generate an \"Enigma Virtual Box\" project file (*.evb)",
   "author": "Eran Tiktin",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "url": "https://github.com/etiktin/generate-evb/issues"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "keywords": [
     "Enigma Virtual Box",
@@ -46,10 +46,10 @@
     "Portable applications"
   ],
   "dependencies": {
-    "graceful-fs": "^4.1.11",
-    "merge-options": "^1.0.0"
+    "graceful-fs": "^4.2.0",
+    "merge-options": "^1.0.1"
   },
   "devDependencies": {
-    "eslint": "^3.19.0"
+    "eslint": "^6.0.1"
   }
 }
